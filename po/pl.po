@@ -19,19 +19,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: src/backlight.c:66
+#: src/backlight.c:65
 msgid "Screen brightness"
 msgstr "Podświetlenie ekranu"
 
-#: src/backlight.c:69
+#: src/backlight.c:68
 msgid "Day"
 msgstr "Dzień"
 
-#: src/backlight.c:70
+#: src/backlight.c:69
 msgid "Night"
 msgstr "Noc"
 
 #: data/rp-backlight-control.desktop.in:3
+msgid "Raspberry Pi Backlight Control"
+msgstr "Raspberry Pi Sterowanie podświetleniem"
+
 #: data/rp-backlight-control.desktop.in:4
 msgid "Backlight Control"
 msgstr "Sterowanie podświetleniem"
