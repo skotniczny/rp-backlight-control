@@ -61,7 +61,7 @@ int main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_DATA_DIR "ui/backlight.ui");
+  GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_UI_DIR "/backlight.ui");
   GObject *win = gtk_builder_get_object(builder, "main_window");
   GObject *btn_day = gtk_builder_get_object(builder, "btn_day");
   GObject *btn_night = gtk_builder_get_object(builder, "btn_night");

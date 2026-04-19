@@ -10,6 +10,7 @@ i18n = import('i18n')
 
 add_project_arguments('-DPACKAGE_LOCALE_DIR="' + share_dir + '/locale"', language: 'c' )
 add_project_arguments('-DPACKAGE_DATA_DIR="' + resource_dir + '"', language : [ 'c', 'cpp' ])
+add_project_arguments('-DPACKAGE_UI_DIR="' + ui_dir + '"', language : [ 'c', 'cpp' ])
 
 subdir('data')
 subdir('po')
