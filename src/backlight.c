@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_UI_DIR "/backlight.ui");
-  GObject *win = gtk_builder_get_object(builder, "main_window");
+  GtkWidget *win = (GtkWidget *) gtk_builder_get_object(builder, "main_window");
   GObject *btn_day = gtk_builder_get_object(builder, "btn_day");
   GObject *btn_night = gtk_builder_get_object(builder, "btn_night");
   GObject *slider = gtk_builder_get_object (builder, "slider");
@@ -72,9 +72,10 @@ int main (int argc, char *argv[])
   g_signal_connect (btn_day, "clicked", G_CALLBACK(on_day_clicked), slider);
   g_signal_connect (btn_night, "clicked", G_CALLBACK(on_night_clicked), slider);
   g_signal_connect (slider, "value-changed", G_CALLBACK(on_slider_changed), NULL);
-  g_signal_connect (win, "delete_event", G_CALLBACK(end_program), NULL);
+  g_signal_connect (win, "destroy", G_CALLBACK(end_program), NULL);
 
-  gtk_widget_show_all (GTK_WIDGET(win));
+  gtk_widget_show_all (win);
   gtk_main ();
+  gtk_widget_destroy (win);
   return 0;
 }
