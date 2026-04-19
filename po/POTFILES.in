@@ -1,0 +1,2 @@
+src/backlight.c
+data/rp-backlight-control.desktop.in

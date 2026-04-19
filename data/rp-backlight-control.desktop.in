@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Raspberry Pi Backlight Control
+GenericName=Display Brightness
+Comment=Adjust the official Raspberry Pi display backlight brightness
+Exec=rp-backlight-control
+Terminal=false
+Categories=GTK;Settings;HardwareSettings;
+Icon=daytime-sunrise-symbolic
