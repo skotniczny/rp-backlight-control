@@ -1,33 +1,57 @@
 #include <stdio.h>
 #include <locale.h>
+#include <dirent.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#define BRIGHTNESS_PATH "/sys/class/backlight/10-0045/brightness"
+#define BRIGHTNESS_PATH "/sys/class/backlight"
 
 typedef enum {
   NIGHT = 20,
   DAY = 200
 } BrightnessLevel;
 
+char *backlight_path = NULL;
+
+gboolean find_backlight (void) {
+  DIR *dir;
+  struct dirent *entry;
+  if ((dir = opendir (BRIGHTNESS_PATH))) {
+    while ((entry = readdir (dir)))
+    {
+      if (entry->d_name[0] != '.') {
+        backlight_path = g_build_filename (BRIGHTNESS_PATH, entry->d_name, NULL);
+        break;
+      }
+    }
+    closedir (dir);
+  }
+  return backlight_path != NULL;
+}
+
 int get_actual_brightness() {
-  FILE *fp = fopen(BRIGHTNESS_PATH, "r");
-  if (fp == NULL) return DAY;
-  int val;
-  fscanf(fp, "%d", &val);
-  fclose(fp);
+  char *filename = g_build_filename (backlight_path, "actual_brightness", NULL);
+  FILE *fp = fopen (filename, "r");
+  int val = DAY;
+  if (fp) {
+    fscanf (fp, "%d", &val);
+    fclose (fp);
+  }
+  g_free (filename);
   return val;
 }
 
 void set_brightness(int value) {
-    FILE *fp = fopen(BRIGHTNESS_PATH, "w");
-    if (fp == NULL) {
-        perror("Cannot open brightness file");
-        return;
-    }
-    fprintf(fp, "%d\n", value);
-    fclose(fp);
+  char *filename = g_build_filename (backlight_path, "brightness", NULL);
+  FILE *fp = fopen (filename, "w");
+  if (fp) {
+    fprintf (fp, "%d\n", value);
+    fclose (fp);
+  } else {
+    g_printerr ("Cannot open brightness file: %s\n", filename);
+  }
+  g_free (filename);
 }
 
 void on_day_clicked(GtkWidget *widget, gpointer data) {
@@ -60,6 +84,11 @@ int main (int argc, char *argv[])
   textdomain (GETTEXT_PACKAGE);
 
   gtk_init (&argc, &argv);
+
+  if (!find_backlight ()) {
+    g_printerr ("No backlight device found\n");
+    return 1;
+  }
 
   GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_UI_DIR "/backlight.ui");
   GtkWidget *win = (GtkWidget *) gtk_builder_get_object(builder, "main_window");

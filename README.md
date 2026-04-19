@@ -1,6 +1,6 @@
 # Raspberry Pi Backlight Control
 
-An application for adjusting the official Raspberry Pi display backlight brightness.
+An application for adjusting display backlight brightness.
 
 Provides a slider and quick preset buttons for day and night modes.
 
