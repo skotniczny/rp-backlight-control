@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">Backlight Control</property>
+    <property name="border-width">5</property>
+    <property name="default-width">250</property>
+    <property name="default-height">10</property>
+
+    <child>
+      <object class="GtkBox" id="main_box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
+
+        <child>
+          <object class="GtkLabel" id="lbl_title">
+            <property name="label" translatable="yes">Screen brightness</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkScale" id="slider">
+            <property name="orientation">horizontal</property>
+            <property name="digits">0</property>
+            <property name="draw-value">true</property>
+            <property name="value-pos">top</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">255</property>
+                <property name="step-increment">1</property>
+              </object>
+            </property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkButton" id="btn_day">
+            <property name="label" translatable="yes">Day</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkButton" id="btn_night">
+            <property name="label" translatable="yes">Night</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </object>
+
+</interface>
