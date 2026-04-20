@@ -30,6 +30,18 @@ gboolean find_backlight (void) {
   return backlight_path != NULL;
 }
 
+int get_max_brightness() {
+  char *filename = g_build_filename (backlight_path, "max_brightness", NULL);
+  FILE *fp = fopen (filename, "r");
+  int max = -1;
+  if (fp) {
+    fscanf (fp, "%d", &max);
+    fclose (fp);
+  }
+  g_free (filename);
+  return max;
+}
+
 int get_actual_brightness() {
   char *filename = g_build_filename (backlight_path, "actual_brightness", NULL);
   FILE *fp = fopen (filename, "r");
@@ -40,15 +52,7 @@ int get_actual_brightness() {
   }
   g_free (filename);
 
-  filename = g_build_filename (backlight_path, "max_brightness", NULL);
-  fp = fopen (filename, "r");
-  int max = -1;
-  if (fp) {
-    fscanf (fp, "%d", &max);
-    fclose (fp);
-  }
-  g_free (filename);
-
+  int max = get_max_brightness();
   if (max == -1 || val == -1) return -1;
 
   int percentage = val * 100 / max;
@@ -56,21 +60,13 @@ int get_actual_brightness() {
 }
 
 void set_brightness(int value) {
-  char *filename = g_build_filename (backlight_path, "max_brightness", NULL);
-  FILE *fp = fopen (filename, "r");
-  int max = -1;
-  if (fp) {
-    fscanf (fp, "%d", &max);
-    fclose (fp);
-  }
-  g_free (filename);
-
+  int max = get_max_brightness();
   if (max == -1) return;
 
   int actual_value = value * max / 100;
 
-  filename = g_build_filename (backlight_path, "brightness", NULL);
-  fp = fopen (filename, "w");
+  char *filename = g_build_filename (backlight_path, "brightness", NULL);
+  FILE *fp = fopen (filename, "w");
   if (fp) {
     fprintf (fp, "%d\n", actual_value);
     fclose (fp);
