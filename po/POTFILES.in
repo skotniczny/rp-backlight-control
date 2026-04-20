@@ -1,2 +1,3 @@
 src/backlight.c
+backlight.ui
 data/rp-backlight-control.desktop.in

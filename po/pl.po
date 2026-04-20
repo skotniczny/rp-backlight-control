@@ -19,11 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: data/backlight.ui:6 data/rp-backlight-control.desktop.in:4
+#: src/backlight.c:74
+#, c-format
+msgid "Cannot open brightness file: %s\n"
+msgstr "Nie można otworzyć pliku sterującego jasnością: %s\n"
+
+#: src/backlight.c:140
+#, c-format
+msgid "Error: not a number\n"
+msgstr "Błąd: wartość nie jest liczbą\n"
+
+#: src/backlight.c:145
+#, c-format
+msgid "Error: out of range 0–100\n"
+msgstr "Błąd: wartość spoza zakresu 0–100\n"
+
+#: src/backlight.c:160
+#, c-format
+msgid "No backlight device found\n"
+msgstr "Nie znaleziono urządzenia podświetlenia ekranu\n"
+
+#: data/backlight.ui:12 data/rp-backlight-control.desktop.in:4
 msgid "Backlight Control"
 msgstr "Sterowanie podświetleniem"
 
-#: data/backlight.ui:18
+#: data/backlight.ui:24
 msgid "Screen brightness"
 msgstr "Podświetlenie ekranu"
 
