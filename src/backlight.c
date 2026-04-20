@@ -71,7 +71,7 @@ void set_brightness(int value) {
     fprintf (fp, "%d\n", actual_value);
     fclose (fp);
   } else {
-    g_printerr ("Cannot open brightness file: %s\n", filename);
+    g_printerr (_("Cannot open brightness file: %s\n"), filename);
   }
   g_free (filename);
 }
@@ -137,12 +137,12 @@ int cli_init(const char *arg) {
   int value = (int)strtol(arg, &endptr, 10);
 
   if (*endptr != '\0') {
-    g_printerr("Error: not a number\n");
+    g_printerr(_("Error: not a number\n"));
     return 1;
   }
 
   if (value < 0 || value > 100) {
-    g_printerr("Error: out of range 0–100\n");
+    g_printerr(_("Error: out of range 0–100\n"));
     return 1;
   }
 
@@ -157,7 +157,7 @@ int main (int argc, char *argv[]) {
   textdomain (GETTEXT_PACKAGE);
 
   if (!find_backlight ()) {
-    g_printerr ("No backlight device found\n");
+    g_printerr (_("No backlight device found\n"));
     return 1;
   }
 
