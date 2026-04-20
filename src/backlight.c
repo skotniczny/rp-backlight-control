@@ -98,19 +98,8 @@ void end_program (GtkWidget *wid, gpointer ptr)
   gtk_main_quit ();
 }
 
-int main (int argc, char *argv[])
-{
-  setlocale (LC_ALL, "");
-  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
-
+int gui_init(int argc, char *argv[]) {
   gtk_init (&argc, &argv);
-
-  if (!find_backlight ()) {
-    g_printerr ("No backlight device found\n");
-    return 1;
-  }
 
   GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_UI_DIR "/backlight.ui");
   GtkWidget *win = (GtkWidget *) gtk_builder_get_object(builder, "main_window");
@@ -132,4 +121,18 @@ int main (int argc, char *argv[])
   gtk_main ();
   gtk_widget_destroy (win);
   return 0;
+}
+
+int main (int argc, char *argv[]) {
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
+
+  if (!find_backlight ()) {
+    g_printerr ("No backlight device found\n");
+    return 1;
+  }
+
+  return gui_init(argc, argv);
 }
