@@ -8,8 +8,8 @@
 #define BRIGHTNESS_PATH "/sys/class/backlight"
 
 typedef enum {
-  NIGHT = 20,
-  DAY = 200
+  NIGHT = 8,
+  DAY = 80
 } BrightnessLevel;
 
 char *backlight_path = NULL;
@@ -33,20 +33,46 @@ gboolean find_backlight (void) {
 int get_actual_brightness() {
   char *filename = g_build_filename (backlight_path, "actual_brightness", NULL);
   FILE *fp = fopen (filename, "r");
-  int val = DAY;
+  int val = -1;
   if (fp) {
     fscanf (fp, "%d", &val);
     fclose (fp);
   }
   g_free (filename);
-  return val;
+
+  filename = g_build_filename (backlight_path, "max_brightness", NULL);
+  fp = fopen (filename, "r");
+  int max = -1;
+  if (fp) {
+    fscanf (fp, "%d", &max);
+    fclose (fp);
+  }
+  g_free (filename);
+
+  if (max == -1 || val == -1) return -1;
+
+  int percentage = val * 100 / max;
+  return percentage;
 }
 
 void set_brightness(int value) {
-  char *filename = g_build_filename (backlight_path, "brightness", NULL);
-  FILE *fp = fopen (filename, "w");
+  char *filename = g_build_filename (backlight_path, "max_brightness", NULL);
+  FILE *fp = fopen (filename, "r");
+  int max = -1;
   if (fp) {
-    fprintf (fp, "%d\n", value);
+    fscanf (fp, "%d", &max);
+    fclose (fp);
+  }
+  g_free (filename);
+
+  if (max == -1) return;
+
+  int actual_value = value * max / 100;
+
+  filename = g_build_filename (backlight_path, "brightness", NULL);
+  fp = fopen (filename, "w");
+  if (fp) {
+    fprintf (fp, "%d\n", actual_value);
     fclose (fp);
   } else {
     g_printerr ("Cannot open brightness file: %s\n", filename);
@@ -96,7 +122,10 @@ int main (int argc, char *argv[])
   GObject *btn_night = gtk_builder_get_object(builder, "btn_night");
   GObject *slider = gtk_builder_get_object (builder, "slider");
 
-  gtk_range_set_value(GTK_RANGE(slider), get_actual_brightness());
+  int actual_brightness = get_actual_brightness();
+  if (actual_brightness >= 0) {
+    gtk_range_set_value(GTK_RANGE(slider), actual_brightness);
+  }
 
   g_signal_connect (btn_day, "clicked", G_CALLBACK(on_day_clicked), slider);
   g_signal_connect (btn_night, "clicked", G_CALLBACK(on_night_clicked), slider);
