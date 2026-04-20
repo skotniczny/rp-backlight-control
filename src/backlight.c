@@ -123,6 +123,33 @@ int gui_init(int argc, char *argv[]) {
   return 0;
 }
 
+int cli_init(const char *arg) {
+  if (g_strcmp0(arg, "day") == 0) {
+    set_brightness(DAY);
+    return 0;
+  }
+  if (g_strcmp0(arg, "night") == 0) {
+    set_brightness(NIGHT);
+    return 0;
+  }
+
+  char *endptr = NULL;
+  int value = (int)strtol(arg, &endptr, 10);
+
+  if (*endptr != '\0') {
+    g_printerr("Error: not a number\n");
+    return 1;
+  }
+
+  if (value < 0 || value > 100) {
+    g_printerr("Error: out of range 0–100\n");
+    return 1;
+  }
+
+  set_brightness(value);
+  return 0;
+}
+
 int main (int argc, char *argv[]) {
   setlocale (LC_ALL, "");
   bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -134,5 +161,8 @@ int main (int argc, char *argv[]) {
     return 1;
   }
 
+  if (argc == 2) {
+    return cli_init(argv[1]);
+  }
   return gui_init(argc, argv);
 }
