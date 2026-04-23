@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rp-backlight-control 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-19 00:29+0200\n"
+"POT-Creation-Date: 2026-04-23 13:33+0200\n"
 "PO-Revision-Date: 2026-04-19 13:26+0200\n"
 "Last-Translator: Skotniczny <skotniczny@outlook.com>\n"
 "Language-Team: Polish \n"
@@ -19,25 +19,25 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: src/backlight.c:74
-#, c-format
-msgid "Cannot open brightness file: %s\n"
-msgstr "Nie można otworzyć pliku sterującego jasnością: %s\n"
-
-#: src/backlight.c:140
+#: src/backlight.c:75
 #, c-format
 msgid "Error: not a number\n"
 msgstr "Błąd: wartość nie jest liczbą\n"
 
-#: src/backlight.c:145
+#: src/backlight.c:80
 #, c-format
 msgid "Error: out of range 0–100\n"
 msgstr "Błąd: wartość spoza zakresu 0–100\n"
 
-#: src/backlight.c:160
+#: src/backlight.c:95
 #, c-format
 msgid "No backlight device found\n"
 msgstr "Nie znaleziono urządzenia podświetlenia ekranu\n"
+
+#: src/brightness.c:67
+#, c-format
+msgid "Cannot open brightness file: %s\n"
+msgstr "Nie można otworzyć pliku sterującego jasnością: %s\n"
 
 #: data/backlight.ui:12 data/rp-backlight-control.desktop.in:4
 msgid "Backlight Control"

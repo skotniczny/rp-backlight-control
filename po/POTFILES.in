@@ -1,3 +1,4 @@
 src/backlight.c
-backlight.ui
+src/brightness.c
+data/backlight.ui
 data/rp-backlight-control.desktop.in
