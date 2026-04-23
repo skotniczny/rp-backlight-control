@@ -12,54 +12,53 @@ typedef enum {
   DAY = 80
 } BrightnessLevel;
 
-void on_day_clicked(GtkWidget *widget, gpointer data) {
-    GtkRange *slider = GTK_RANGE(data);
-    gtk_range_set_value(slider, DAY);
-    set_brightness(DAY);
+static void on_day_clicked(GtkWidget *widget, gpointer data) {
+  GtkRange *slider = GTK_RANGE(data);
+  gtk_range_set_value(slider, DAY);
+  set_brightness(DAY);
 }
 
-void on_night_clicked(GtkWidget *widget, gpointer data) {
-    GtkRange *slider = GTK_RANGE(data);
-    gtk_range_set_value(slider, NIGHT);
-    set_brightness(NIGHT);
+static void on_night_clicked(GtkWidget *widget, gpointer data) {
+  GtkRange *slider = GTK_RANGE(data);
+  gtk_range_set_value(slider, NIGHT);
+  set_brightness(NIGHT);
 }
 
-void on_slider_changed(GtkRange *range, gpointer data) {
+static void on_slider_changed(GtkRange *range, gpointer data) {
   int value = (int)gtk_range_get_value(range);
   set_brightness(value);
 }
 
-void end_program (GtkWidget *wid, gpointer ptr)
-{
-  gtk_main_quit ();
+static void end_program(GtkWidget *wid, gpointer ptr) {
+  gtk_main_quit();
 }
 
-int gui_init(int argc, char *argv[]) {
-  gtk_init (&argc, &argv);
+static int gui_init(int argc, char *argv[]) {
+  gtk_init(&argc, &argv);
 
-  GtkBuilder *builder = gtk_builder_new_from_file (PACKAGE_UI_DIR "/backlight.ui");
+  GtkBuilder *builder = gtk_builder_new_from_file(PACKAGE_UI_DIR "/backlight.ui");
   GtkWidget *win = (GtkWidget *) gtk_builder_get_object(builder, "main_window");
   GObject *btn_day = gtk_builder_get_object(builder, "btn_day");
   GObject *btn_night = gtk_builder_get_object(builder, "btn_night");
-  GObject *slider = gtk_builder_get_object (builder, "slider");
+  GObject *slider = gtk_builder_get_object(builder, "slider");
 
   int actual_brightness = get_actual_brightness();
   if (actual_brightness >= 0) {
     gtk_range_set_value(GTK_RANGE(slider), actual_brightness);
   }
 
-  g_signal_connect (btn_day, "clicked", G_CALLBACK(on_day_clicked), slider);
-  g_signal_connect (btn_night, "clicked", G_CALLBACK(on_night_clicked), slider);
-  g_signal_connect (slider, "value-changed", G_CALLBACK(on_slider_changed), NULL);
-  g_signal_connect (win, "destroy", G_CALLBACK(end_program), NULL);
+  g_signal_connect(btn_day, "clicked", G_CALLBACK(on_day_clicked), slider);
+  g_signal_connect(btn_night, "clicked", G_CALLBACK(on_night_clicked), slider);
+  g_signal_connect(slider, "value-changed", G_CALLBACK(on_slider_changed), NULL);
+  g_signal_connect(win, "destroy", G_CALLBACK(end_program), NULL);
 
-  gtk_widget_show_all (win);
-  gtk_main ();
-  gtk_widget_destroy (win);
+  gtk_widget_show_all(win);
+  gtk_main();
+  gtk_widget_destroy(win);
   return 0;
 }
 
-int cli_init(const char *arg) {
+static int cli_init(const char *arg) {
   if (g_strcmp0(arg, "day") == 0) {
     set_brightness(DAY);
     return 0;
@@ -86,14 +85,14 @@ int cli_init(const char *arg) {
   return 0;
 }
 
-int main (int argc, char *argv[]) {
-  setlocale (LC_ALL, "");
-  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
+int main(int argc, char *argv[]) {
+  setlocale(LC_ALL, "");
+  bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  textdomain(GETTEXT_PACKAGE);
 
   if (!find_backlight_path()) {
-    g_printerr (_("No backlight device found\n"));
+    g_printerr(_("No backlight device found\n"));
     return 1;
   }
 
