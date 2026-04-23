@@ -1,5 +1,6 @@
 sources = files (
-  'backlight.c'
+  'backlight.c',
+  'brightness.c'
 )
 
 gtk = dependency ('gtk+-3.0')
