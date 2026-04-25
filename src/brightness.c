@@ -1,30 +1,24 @@
 #include <stdio.h>
-#include <dirent.h>
 
 #include <glib/gi18n.h>
 #include "brightness.h"
 
 #define BRIGHTNESS_PATH "/sys/class/backlight"
 
-static char *backlight_path = NULL;
+static char *brightness_dir = NULL;
 
-gboolean find_backlight_path(void) {
-  DIR *dir;
-  struct dirent *entry;
-  if ((dir = opendir(BRIGHTNESS_PATH))) {
-    while ((entry = readdir(dir))) {
-      if (entry->d_name[0] != '.') {
-        backlight_path = g_build_filename(BRIGHTNESS_PATH, entry->d_name, NULL);
-        break;
-      }
-    }
-    closedir(dir);
+gboolean find_brightness_dir(void) {
+  GDir *dir = g_dir_open(BRIGHTNESS_PATH, 0, NULL);
+  if (dir) {
+    const char *name = g_dir_read_name(dir);
+    if (name) brightness_dir = g_build_filename(BRIGHTNESS_PATH, name, NULL);
+    g_dir_close(dir);
   }
-  return backlight_path != NULL;
+  return brightness_dir != NULL;
 }
 
 int get_max_brightness(void) {
-  char *filename = g_build_filename(backlight_path, "max_brightness", NULL);
+  char *filename = g_build_filename(brightness_dir, "max_brightness", NULL);
   FILE *fp = fopen(filename, "r");
   int max = -1;
   if (fp) {
@@ -36,7 +30,7 @@ int get_max_brightness(void) {
 }
 
 int get_actual_brightness(void) {
-  char *filename = g_build_filename(backlight_path, "actual_brightness", NULL);
+  char *filename = g_build_filename(brightness_dir, "actual_brightness", NULL);
   FILE *fp = fopen(filename, "r");
   int val = -1;
   if (fp) {
@@ -58,7 +52,7 @@ void set_brightness(int value) {
 
   int actual_value = value * max / 100;
 
-  char *filename = g_build_filename(backlight_path, "brightness", NULL);
+  char *filename = g_build_filename(brightness_dir, "brightness", NULL);
   FILE *fp = fopen(filename, "w");
   if (fp) {
     fprintf(fp, "%d\n", actual_value);
